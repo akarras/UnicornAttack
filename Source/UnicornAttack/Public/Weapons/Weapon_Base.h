@@ -17,42 +17,61 @@ class UNICORNATTACK_API UWeapon_Base : public UObject
 public:
 	UWeapon_Base();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="WeaponPricing")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Pricing")
 	bool isPurchased;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="WeaponPricing")
-	float fBaseDamagePrice;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="WeaponPricing")
-	float fBaseSpeedPrice;
+	// PRICING
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Pricing")
+	float fPurchasePrice;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Weapon|Pricing")
+	float fBaseDamagePrice;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Weapon|Pricing")
+	float fBaseSpeedPrice;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Weapon|Pricing")
 	float fBaseDamagePriceFactor;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Weapon|Pricing")
 	float fBaseSpeedPriceFactor;
 
-	UFUNCTION(BlueprintCallable, Category="WeaponPricing")
+	UFUNCTION(BlueprintCallable, Category="Weapon|Pricing")
 	virtual void PurchaseSpeed();
-	UFUNCTION(BlueprintCallable, Category="WeaponPricing")
+	UFUNCTION(BlueprintCallable, Category="Weapon|Pricing")
 	virtual void PurchaseDamage();
+	
+	UFUNCTION(BlueprintCallable, Category="Weapon|Pricing")
+	virtual float GetDamagePrice();
+	UFUNCTION(BlueprintCallable, Category="Weapon|Pricing")
+	virtual float GetSpeedPrice();
 
-	UFUNCTION(BlueprintCallable, Category = "WeaponPricing")
+	UFUNCTION(BlueprintCallable, Category = "Weapon|Pricing")
 	virtual float GetPriceForLevel(int level, float priceFactor, float basePrice);
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Weapon")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Weapon|Assets")
 	TSubclassOf<AProjectile_Base> Projectile;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Weapon")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Weapon|Assets")
 	USoundBase* ProjectileSound;
-
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Weapon|Information")
+	FText weaponName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Damage")
 	float fBaseDamage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category ="Weapon|Damage")
+	float fDamageFactor;
+	UPROPERTY(BlueprintReadOnly, Category="Weapon|Damage")
 	float fDamage;
+	UPROPERTY(BlueprintReadOnly, Category="Weapon|Damage")
 	int iDamageLevel;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category ="Weapon|Damage")
 	float fBaseSpeed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Damage")
+	float fSpeedFactor;
+	UPROPERTY(BlueprintReadOnly, Category ="Weapon|Damage")
 	float fSpeed;
+	UPROPERTY(BlueprintReadOnly, Category ="Weapon|Damage")
 	int iSpeedLevel;
-	
-	virtual void DoSpeedUpgrade();
-	virtual void DoDamageUpgrade();
+
 	UFUNCTION(BlueprintCallable, Category="Weapon")
-	virtual void Fire(FTransform transform, AActor* instigator);
+	virtual void Fire(FTransform transform, APawn* instigator);
+	UFUNCTION(BlueprintCallable, Category="Weapon")
+	virtual void Reset();
 };

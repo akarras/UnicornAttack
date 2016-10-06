@@ -23,6 +23,12 @@ void UWeaponSystem::BeginPlay()
 	{
 		Weapons.Add(Weapon.GetDefaultObject());
 	}
+
+	for (auto Weapon : Weapons)
+	{
+		// Reset our weapons back to the default stats when the game starts.
+		Weapon->Reset();
+	}
 	// ...
 	
 }
