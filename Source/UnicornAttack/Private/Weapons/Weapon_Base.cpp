@@ -5,6 +5,7 @@
 
 UWeapon_Base::UWeapon_Base() 
 {
+	isPurchased = isPurchasedConfig;
 	fPurchasePrice = 200.0f;
 
 	// Damage stats
@@ -39,7 +40,7 @@ float UWeapon_Base::GetPriceForLevel(int level, float priceFactor, float basePri
 void UWeapon_Base::PurchaseDamage() 
 {
 	iDamageLevel++;
-	fDamage = GetPriceForLevel(iDamageLevel, fDamageFactor, fBaseDamagePrice);
+	fDamage = GetPriceForLevel(iDamageLevel, fDamageFactor, fBaseDamage);
 }
 
 
@@ -59,16 +60,22 @@ float UWeapon_Base::GetSpeedPrice()
 	return GetPriceForLevel(iSpeedLevel, fBaseSpeedPriceFactor, fBaseSpeedPrice);
 }
 
-void UWeapon_Base::Fire(FTransform transform, APawn* instigator)
+void UWeapon_Base::Fire_Implementation(FTransform transform, APawn* instigator)
 {
 	// Start spawning the projectile, then assign the damage value and finish spawning
 	
 	AActor* actor = UGameplayStatics::BeginDeferredActorSpawnFromClass(this, Projectile, transform);
-	UGameplayStatics::PlaySoundAtLocation(this, ProjectileSound, transform.GetLocation(), 1.0f);
+	PlayWeaponSound(transform.GetLocation());
 	AProjectile_Base* projectile = Cast<AProjectile_Base>(actor);
 	projectile->fDamage = fDamage;
 	projectile->Instigator = instigator;
+	projectile->SetReplicates(true);
 	UGameplayStatics::FinishSpawningActor(actor, transform);
+}
+
+bool UWeapon_Base::Fire_Validate(FTransform transform, APawn* instigator)
+{
+	return true;
 }
 
 void UWeapon_Base::Reset()
@@ -78,4 +85,9 @@ void UWeapon_Base::Reset()
 
 	iSpeedLevel = 1;
 	iDamageLevel = 1;
+}
+
+void UWeapon_Base::PlayWeaponSound_Implementation(FVector location)
+{
+	UGameplayStatics::PlaySoundAtLocation(this, ProjectileSound, location, 1.0f);
 }

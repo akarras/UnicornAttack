@@ -17,7 +17,10 @@ class UNICORNATTACK_API UWeapon_Base : public UObject
 public:
 	UWeapon_Base();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon|Pricing")
+	UPROPERTY(EditAnywhere, Category="Weapon|Pricing")
+	bool isPurchasedConfig;
+
+	UPROPERTY(BlueprintReadWrite, Category="Weapon|Pricing")
 	bool isPurchased;
 
 	// PRICING
@@ -70,8 +73,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category ="Weapon|Damage")
 	int iSpeedLevel;
 
-	UFUNCTION(BlueprintCallable, Category="Weapon")
+	UFUNCTION(BlueprintCallable, Server, Reliable, WithValidation, Category="Weapon")
 	virtual void Fire(FTransform transform, APawn* instigator);
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	virtual void Reset();
+
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, Category="Weapon")
+	virtual void PlayWeaponSound(FVector location);
 };

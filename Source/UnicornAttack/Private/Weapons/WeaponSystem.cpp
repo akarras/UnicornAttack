@@ -44,10 +44,58 @@ void UWeaponSystem::TickComponent( float DeltaTime, ELevelTick TickType, FActorC
 
 UWeapon_Base* UWeaponSystem::GetCurrentWeapon()
 {
-	if (Weapons.IsValidIndex(0)) 
+	if (Weapons.IsValidIndex(SelectedWeapon)) 
 	{
-		return Weapons[0];
+		return Weapons[SelectedWeapon];
 	}
 	return nullptr;
 }
 
+void UWeaponSystem::switchNextWeapon()
+{
+	// Go to the next index
+	//    If the index is out of the bounds, reset back to 0
+	//    If the weapon isn't purchased, switch to the next index
+	bool selectedValidWeapon = false;
+	int initialWeapon = SelectedWeapon;
+	while (!selectedValidWeapon)
+	{
+		SelectedWeapon++;
+		if (Weapons.IsValidIndex(SelectedWeapon))
+		{
+			if (auto weapon = Weapons[SelectedWeapon])
+			{
+				if (weapon->isPurchased)
+				{
+					selectedValidWeapon = true;
+				}
+			}
+		}
+		else {
+			SelectedWeapon = -1;
+		}
+	}
+}
+
+void UWeaponSystem::switchPreviousWeapon()
+{
+	bool selectedValidWeapon = false;
+	int initialWeapon = SelectedWeapon;
+	while (!selectedValidWeapon)
+	{
+		SelectedWeapon--;
+		if (Weapons.IsValidIndex(SelectedWeapon))
+		{
+			if (auto weapon = Weapons[SelectedWeapon])
+			{
+				if (weapon->isPurchased)
+				{
+					selectedValidWeapon = true;
+				}
+			}
+		}
+		else {
+			SelectedWeapon = Weapons.Num();
+		}
+	}
+}

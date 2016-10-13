@@ -11,7 +11,6 @@ UCLASS(Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class UNICORNATTACK_API UWeaponSystem : public UActorComponent
 {
 	GENERATED_BODY()
-
 public:	
 	// Sets default values for this component's properties
 	UWeaponSystem();
@@ -28,5 +27,12 @@ public:
 	TArray<TSubclassOf<UWeapon_Base>> AvailableWeapons;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TArray<UWeapon_Base*> Weapons;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	int SelectedWeapon;
 	
+	UFUNCTION(BlueprintCallable, Category="Weapon")
+	virtual void switchNextWeapon();
+	UFUNCTION(BlueprintCallable, Category="Weapon")
+	virtual void switchPreviousWeapon();
 };
