@@ -69,6 +69,7 @@ void UWeapon_Base::Fire_Implementation(FTransform transform, APawn* instigator)
 	projectile->fDamage = fDamage;
 	projectile->Instigator = instigator;
 	projectile->SetReplicates(true);
+	projectile->SetReplicateMovement(true);
 	UGameplayStatics::FinishSpawningActor(actor, transform);
 }
 
