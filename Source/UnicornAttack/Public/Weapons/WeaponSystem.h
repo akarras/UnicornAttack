@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
+#include "Net/UnrealNetwork.h"
 #include "Weapons/Weapon_Base.h"
 #include "WeaponSystem.generated.h"
 
@@ -25,12 +26,15 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TArray<TSubclassOf<UWeapon_Base>> AvailableWeapons;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, Replicated, BlueprintReadWrite)
 	TArray<UWeapon_Base*> Weapons;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category="Weapon")
 	int SelectedWeapon;
 	
+	UFUNCTION(Server, Reliable, WithValidation, Category = "Weapon")
+	virtual void updateServerWeapon(int weapon);
+
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	virtual void switchNextWeapon();
 	UFUNCTION(BlueprintCallable, Category="Weapon")

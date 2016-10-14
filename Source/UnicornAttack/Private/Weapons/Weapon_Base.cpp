@@ -63,7 +63,6 @@ float UWeapon_Base::GetSpeedPrice()
 void UWeapon_Base::Fire_Implementation(FTransform transform, APawn* instigator)
 {
 	// Start spawning the projectile, then assign the damage value and finish spawning
-	
 	AActor* actor = UGameplayStatics::BeginDeferredActorSpawnFromClass(this, Projectile, transform);
 	PlayWeaponSound(transform.GetLocation());
 	AProjectile_Base* projectile = Cast<AProjectile_Base>(actor);
@@ -80,6 +79,7 @@ bool UWeapon_Base::Fire_Validate(FTransform transform, APawn* instigator)
 
 void UWeapon_Base::Reset()
 {
+	isPurchased = isPurchasedConfig;
 	fDamage = fBaseDamage;
 	fSpeed = fBaseSpeed;
 

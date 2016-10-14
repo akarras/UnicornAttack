@@ -1,6 +1,7 @@
 // colorfulchew 2016
 
 #include "UnicornAttack.h"
+#include "Net/UnrealNetwork.h"
 #include "WeaponSystem.h"
 
 
@@ -11,9 +12,8 @@ UWeaponSystem::UWeaponSystem()
 	// off to improve performance if you don't need them.
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
-	// ...
+	bReplicates = true;
 }
-
 
 // Called when the game starts
 void UWeaponSystem::BeginPlay()
@@ -33,6 +33,10 @@ void UWeaponSystem::BeginPlay()
 	
 }
 
+void UWeaponSystem::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
+{
+	DOREPLIFETIME(UWeaponSystem, SelectedWeapon);
+}
 
 // Called every frame
 void UWeaponSystem::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
@@ -67,6 +71,7 @@ void UWeaponSystem::switchNextWeapon()
 			{
 				if (weapon->isPurchased)
 				{
+					updateServerWeapon(SelectedWeapon);
 					selectedValidWeapon = true;
 				}
 			}
@@ -90,6 +95,7 @@ void UWeaponSystem::switchPreviousWeapon()
 			{
 				if (weapon->isPurchased)
 				{
+					updateServerWeapon(SelectedWeapon);
 					selectedValidWeapon = true;
 				}
 			}
@@ -98,4 +104,14 @@ void UWeaponSystem::switchPreviousWeapon()
 			SelectedWeapon = Weapons.Num();
 		}
 	}
+}
+
+void UWeaponSystem::updateServerWeapon_Implementation(int weapon)
+{
+	SelectedWeapon = weapon;
+}
+
+bool UWeaponSystem::updateServerWeapon_Validate(int weapon)
+{
+	return true;
 }
